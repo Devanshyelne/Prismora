@@ -7,6 +7,12 @@ __pycache__/
 **/__pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
 
 # Virtual environments
 venv/
@@ -51,3 +57,21 @@ static/uploads/*
 # OS temporary files
 .DS_Store
 Thumbs.db
+
+# Virtual environments
+venv/
+venv312/
+.venv/
+
+# Model files and datasets
+experiment/
+*.pth
+*.pt
+content_data/
+style_data/
+test2017/
+train_1/
+
+# Generated uploads
+static/uploads/*
+!static/uploads/.gitkeep

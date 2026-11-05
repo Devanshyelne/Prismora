@@ -17,15 +17,17 @@ from utils.utils import (
 )
 from utils.models import VGGEncoder, Decoder
 
+PROJECT_ROOT = Path(__file__).resolve().parent
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Train an AdaIN neural style transfer decoder.")
     parser.add_argument("--content_dir", type=str,
-                        default="/Users/devanshyelne/Major_project/NST/test2017")
+                        default=str(PROJECT_ROOT / "content_data"))
     parser.add_argument("--style_dir", type=str,
-                        default="/Users/devanshyelne/Major_project/NST/train_1")
+                        default=str(PROJECT_ROOT / "style_data"))
     parser.add_argument("--vgg", type=str,
-                        default="/Users/devanshyelne/Major_project/NST/vgg_normalised.pth")
+                        default=str(PROJECT_ROOT / "vgg_normalised.pth"))
     parser.add_argument("--experiment", type=str, default="big_dataset")
     parser.add_argument("--final_size", type=int, default=256)
     parser.add_argument("--content_size", type=int, default=512)
@@ -66,7 +68,7 @@ def main():
     if device.type == "cpu":
         print("WARNING: no CUDA/MPS accelerator detected; training on CPU may be very slow.")
 
-    root = Path("experiment") / args.experiment
+    root = PROJECT_ROOT / "experiment" / args.experiment
     root.mkdir(parents=True, exist_ok=True)
 
     content_transform = get_transform(args.content_size, True, args.final_size)

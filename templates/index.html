@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>StyleForge AI</title>
+<meta name="description" content="PRISMORA AI is a neural style studio exploring creative expression through Adaptive Instance Normalization.">
+<meta name="theme-color" content="#0b1020">
+<title>PRISMORA AI — NEURAL STYLE STUDIO</title>
+<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -174,6 +177,28 @@
         gap: 0.75rem;
         flex-wrap: wrap;
         margin-top: 1rem;
+    }
+    .example-picker {
+        display: grid;
+        gap: 0.4rem;
+        margin-top: 1rem;
+    }
+    .example-picker label {
+        color: var(--muted);
+        font-size: 0.82rem;
+    }
+    .example-picker select {
+        width: 100%;
+        min-height: 42px;
+        padding: 0.55rem 0.8rem;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        border-radius: 10px;
+        background: #11182a;
+        color: var(--text);
+    }
+    .example-picker select:focus-visible {
+        outline: 2px solid #a855f7;
+        outline-offset: 2px;
     }
     .file-input {
         position: absolute;
@@ -390,7 +415,7 @@
     }
     .btn-download:hover { color: #fff; filter: brightness(1.08); }
 
-    /* Examples */
+    /* Examples: style transfer showcase */
     .section-title {
         font-size: 0.95rem;
         letter-spacing: 2px;
@@ -405,58 +430,61 @@
         font-size: 0.95rem;
         margin-bottom: 1.5rem;
     }
-    .example-card {
-        margin: 0;
-        overflow: hidden;
-        height: 100%;
+    .showcase {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
     }
-    .example-media {
-        position: relative;
-        height: 300px;
+    .showcase-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.3fr);
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .showcase-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(168, 85, 247, 0.4);
+        box-shadow: 0 24px 50px -22px rgba(168, 85, 247, 0.45);
+    }
+    .showcase-inputs {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+    .showcase-frame {
+        margin: 0;
+        min-width: 0;
+    }
+    .showcase-img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 320px;
+        object-fit: contain;
+        object-position: center;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: #080b14;
+    }
+    .showcase-output .showcase-img {
+        border-color: rgba(168, 85, 247, 0.35);
+    }
+    .showcase-frame figcaption {
+        margin-top: 0.6rem;
+        text-align: center;
+    }
+    .showcase-arrow {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: var(--surface-strong);
-        padding: 0.75rem;
-    }
-    .example-media img {
-        max-width: 100%;
-        max-height: 100%;
-        width: auto;
-        height: auto;
-        object-fit: contain;
-        border-radius: 10px;
-    }
-    .missing-note {
-        display: none;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.4rem;
-        color: #fca5a5;
-        font-size: 0.9rem;
-        text-align: center;
-        padding: 1rem;
-    }
-    .missing-note code {
-        color: #e0e7ff;
-        background: rgba(255, 255, 255, 0.06);
-        padding: 0.1rem 0.4rem;
-        border-radius: 6px;
-    }
-    .example-media.is-missing img { display: none; }
-    .example-media.is-missing .missing-note { display: flex; }
-    .example-card figcaption {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 1rem 1.25rem;
-        border-top: 1px solid var(--border);
-    }
-    .example-card h3 {
-        font-size: 0.95rem;
-        margin: 0;
-        color: #f8fafc;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        color: #fff;
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        box-shadow: 0 10px 24px -10px rgba(168, 85, 247, 0.8);
     }
     .tag {
         font-size: 0.7rem;
@@ -467,6 +495,19 @@
         border-radius: 999px;
         padding: 0.2rem 0.6rem;
         white-space: nowrap;
+    }
+    .tag-output {
+        color: #fff;
+        border-color: transparent;
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+    }
+    @media (max-width: 991.98px) {
+        .showcase-card { grid-template-columns: 1fr; gap: 1.25rem; padding: 1.25rem; }
+        .showcase-arrow { justify-self: center; transform: rotate(90deg); }
+    }
+    @media (max-width: 767.98px) {
+        .showcase-inputs { grid-template-columns: minmax(0, 1fr); }
+        .showcase-img { max-height: 360px; }
     }
 
     /* FAQ */
@@ -489,17 +530,135 @@
         box-shadow: none;
     }
     .faq-section .accordion-button::after { filter: invert(1) brightness(1.4); }
+    .faq-section .accordion-collapse:not(.show) { display: none; }
+    .faq-section .accordion-button::after {
+        content: "+";
+        width: auto;
+        height: auto;
+        margin-left: auto;
+        background-image: none;
+        filter: none;
+        color: #c4b5fd;
+        font-size: 1.4rem;
+        font-weight: 400;
+        line-height: 1;
+    }
+    .faq-section .accordion-button[aria-expanded="true"]::after { content: "−"; }
     .faq-section .accordion-body {
         color: var(--muted);
     }
 
+    /* Let's Connect */
+    .connect-section {
+        position: relative;
+        margin-top: 4rem;
+        padding: 5rem 0 4.5rem;
+        border-top: 1px solid var(--border);
+        background-color: rgba(8, 11, 23, 0.92);
+        background-image:
+            radial-gradient(800px 340px at 18% 15%, rgba(99, 102, 241, 0.15), transparent 65%),
+            radial-gradient(720px 360px at 86% 85%, rgba(45, 212, 191, 0.1), transparent 65%);
+        overflow: hidden;
+    }
+    .connect-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+        background-size: 48px 48px;
+        -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+        mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+        pointer-events: none;
+    }
+    .connect-section > .container { position: relative; }
+    .connect-kicker {
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 0.8rem;
+        letter-spacing: 3px;
+        color: #5eead4;
+        margin-bottom: 1rem;
+    }
+    .connect-title {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 700;
+        font-size: clamp(2rem, 5.5vw, 3.6rem);
+        line-height: 1.15;
+        letter-spacing: 1px;
+        color: #fff;
+        margin: 0 0 1.25rem;
+    }
+    .connect-gradient {
+        background: linear-gradient(90deg, #c084fc, #2dd4bf);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .connect-sub {
+        color: var(--muted);
+        font-size: 1.05rem;
+        max-width: 700px;
+        margin: 0 auto 0.8rem;
+    }
+    .connect-detail {
+        color: #cbd5e1;
+        max-width: 620px;
+        margin: 0 auto 2.1rem;
+        font-size: 0.98rem;
+    }
+    .connect-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.85rem;
+    }
+    .connect-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        width: 172px;
+        min-width: 172px;
+        flex: 0 0 172px;
+        padding: 0.8rem 1.4rem;
+        border: 1px solid rgba(168, 85, 247, 0.35);
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.5);
+        color: #e2e8f0;
+        font-weight: 500;
+        text-decoration: none;
+        transition: border-color 0.2s, color 0.2s, background-color 0.2s, transform 0.2s;
+    }
+    .connect-btn i, .connect-btn svg { color: #5eead4; transition: color 0.2s; }
+    .connect-btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+    .connect-btn:hover,
+    .connect-btn:focus-visible {
+        border-color: #5eead4;
+        background: rgba(45, 212, 191, 0.08);
+        color: #fff;
+        transform: translateY(-2px);
+    }
+    .connect-btn:hover i,
+    .connect-btn:focus-visible i,
+    .connect-btn:hover svg,
+    .connect-btn:focus-visible svg { color: #c084fc; }
+    @media (max-width: 575.98px) {
+        .connect-btn {
+            width: calc((100% - 0.85rem) / 2);
+            min-width: 0;
+            flex: 0 0 calc((100% - 0.85rem) / 2);
+        }
+    }
+
     /* Footer */
     .site-footer {
-        margin-top: 4rem;
+        margin-top: 0;
         padding: 2rem 0;
         border-top: 1px solid var(--border);
-        color: #64748b;
-        font-size: 0.85rem;
+        color: #94a3b8;
+        font-size: 0.82rem;
+        text-align: center;
     }
 
     /* Loader */
@@ -557,7 +716,6 @@
     @media (max-width: 767.98px) {
         .hero { padding-top: 2.5rem; }
         .preview-box { height: 220px; }
-        .example-media { height: 240px; }
         .btn-transfer { width: 100%; min-width: 0; }
         .controls { padding: 1.25rem; }
     }
@@ -579,26 +737,27 @@
 
 <header class="site-header">
     <div class="container d-flex align-items-center justify-content-between py-3">
-        <span class="brand"><i class="fas fa-wand-magic-sparkles me-2"></i>STYLEFORGE AI</span>
-        <span class="header-meta d-none d-sm-inline">AdaIN Neural Style Transfer</span>
+        <div class="d-flex flex-column">
+            <span class="brand"><i class="fas fa-wand-magic-sparkles me-2"></i>PRISMORA AI</span>
+            <span class="header-meta" style="font-size:.66rem; letter-spacing:.14em;">NEURAL STYLE STUDIO</span>
+        </div>
+        <span class="header-meta d-none d-sm-inline">Transforming pixels into art.</span>
     </div>
 </header>
 
 <section class="hero reveal">
     <div class="container">
-        <span class="eyebrow">Flask &middot; PyTorch &middot; AdaIN</span>
-        <h1>STYLEFORGE AI</h1>
-        <p class="tagline">Redefine reality with AI-powered artistry. Upload a content photo and a style reference, then generate a stylized result.</p>
+        <span class="eyebrow">NEURAL STYLE STUDIO</span>
+        <h1>PRISMORA AI</h1>
+        <p class="tagline">Transforming pixels into art.</p>
+        <p class="tagline mt-2">Blend a content photograph with a style reference using Adaptive Instance Normalization.</p>
     </div>
 </section>
 
 <main class="container pb-4">
     <form method="post" enctype="multipart/form-data" id="uploadForm">
         {{ form.hidden_tag() }}
-        {# Hidden paths keep previously uploaded images when only one slot is replaced #}
-        <input type="hidden" name="content_path" id="contentPath" value="{{ content_path or '' }}">
-        <input type="hidden" name="style_path" id="stylePath" value="{{ style_path or '' }}">
-        {% set alpha_value = form.alpha.data if form.alpha.data is not none else 1.0 %}
+        {% set alpha_value = form.alpha.data if form.alpha.data is not none else 0.65 %}
 
         <div class="row g-4">
             <!-- Content Source -->
@@ -608,17 +767,26 @@
                     <div class="slot-body">
                         <div class="preview-box" id="contentPreview">
                             {% if content_image %}
-                                <img src="{{ url_for('send_image', filename=content_image) }}" alt="Content image preview">
+                                <img src="{{ content_image.url }}" alt="Content image preview">
                             {% else %}
                                 <div class="placeholder"><i class="fas fa-image"></i><span>No content image selected</span></div>
                             {% endif %}
                         </div>
                         <div class="file-row">
                             {{ form.content(class="file-input", accept=".png,.jpg,.jpeg,image/png,image/jpeg") }}
-                            <label class="btn-upload" for="content"><i class="fas fa-upload"></i><span>{{ 'Replace image' if (content_image or content_path) else 'Upload image' }}</span></label>
-                            <button type="button" class="btn-remove" id="contentRemove" {{ '' if (content_image or content_path) else 'hidden' }}><i class="fas fa-xmark"></i> Remove</button>
+                            <label class="btn-upload" for="content"><i class="fas fa-upload"></i><span>{{ 'Replace image' if content_image else 'Upload image' }}</span></label>
+                            <button type="button" class="btn-remove" id="contentRemove" {{ '' if content_image else 'hidden' }}><i class="fas fa-xmark"></i> Remove</button>
                         </div>
-                        <p class="file-name" id="contentName">{{ content_image or 'No file selected' }}</p>
+                        <div class="example-picker">
+                            <label for="contentExample">Or use a built-in content image</label>
+                            <select id="contentExample" name="content_example" data-example-select>
+                                <option value="">Choose a built-in example…</option>
+                                {% for example in content_examples %}
+                                <option value="{{ example.id }}" data-url="{{ example.url }}" {{ 'selected' if form.content_example.data == example.id else '' }}>{{ example.label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <p class="file-name" id="contentName">{{ content_image.label if content_image else 'No file selected' }}</p>
                     </div>
                 </section>
             </div>
@@ -630,17 +798,26 @@
                     <div class="slot-body">
                         <div class="preview-box" id="stylePreview">
                             {% if style_image %}
-                                <img src="{{ url_for('send_image', filename=style_image) }}" alt="Style reference preview">
+                                <img src="{{ style_image.url }}" alt="Style reference preview">
                             {% else %}
                                 <div class="placeholder"><i class="fas fa-palette"></i><span>No style reference selected</span></div>
                             {% endif %}
                         </div>
                         <div class="file-row">
                             {{ form.style(class="file-input", accept=".png,.jpg,.jpeg,image/png,image/jpeg") }}
-                            <label class="btn-upload" for="style"><i class="fas fa-upload"></i><span>{{ 'Replace image' if (style_image or style_path) else 'Upload image' }}</span></label>
-                            <button type="button" class="btn-remove" id="styleRemove" {{ '' if (style_image or style_path) else 'hidden' }}><i class="fas fa-xmark"></i> Remove</button>
+                            <label class="btn-upload" for="style"><i class="fas fa-upload"></i><span>{{ 'Replace image' if style_image else 'Upload image' }}</span></label>
+                            <button type="button" class="btn-remove" id="styleRemove" {{ '' if style_image else 'hidden' }}><i class="fas fa-xmark"></i> Remove</button>
                         </div>
-                        <p class="file-name" id="styleName">{{ style_image or 'No file selected' }}</p>
+                        <div class="example-picker">
+                            <label for="styleExample">Or use a built-in style reference</label>
+                            <select id="styleExample" name="style_example" data-example-select>
+                                <option value="">Choose a built-in example…</option>
+                                {% for example in style_examples %}
+                                <option value="{{ example.id }}" data-url="{{ example.url }}" {{ 'selected' if form.style_example.data == example.id else '' }}>{{ example.label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <p class="file-name" id="styleName">{{ style_image.label if style_image else 'No file selected' }}</p>
                     </div>
                 </section>
             </div>
@@ -674,16 +851,16 @@
         </div>
     {% endif %}
 
-    {% if result_image %}
+    {% if result_image_url %}
     <div class="row justify-content-center mt-5" id="resultSection">
         <div class="col-lg-8">
             <section class="glass result reveal">
                 <header class="slot-head" style="color:#6ee7b7;">Stylized Result</header>
                 <div class="result-media">
-                    <img src="{{ url_for('send_image', filename=result_image) }}" alt="Stylized result">
+                    <img src="{{ result_image_url }}" alt="Stylized result">
                 </div>
                 <div class="result-footer">
-                    <a class="btn-download" href="{{ url_for('send_image', filename=result_image) }}" download>
+                    <a class="btn-download" href="{{ result_download_url }}">
                         <i class="fas fa-download"></i> Download Result
                     </a>
                 </div>
@@ -692,41 +869,36 @@
     </div>
     {% endif %}
 
-    <!-- Examples: content images only -->
-    <section class="examples-section mt-5 pt-3">
-        <h2 class="section-title">Content Examples</h2>
-        <p class="section-sub">Sample content images. Upload one of these, or your own photo, as the content source.</p>
-        <div class="row g-4 justify-content-center">
-            <div class="col-md-6 col-lg-5">
-                <figure class="example-card glass">
-                    <div class="example-media">
-                        <img src="{{ url_for('send_example', filename='virat_kohli.jpg') }}" alt="Virat Kohli content image">
-                        <div class="missing-note">
-                            <i class="fas fa-circle-exclamation"></i>
-                            <span>Image not found. Add <code>examples/virat_kohli.jpg</code></span>
-                        </div>
-                    </div>
-                    <figcaption>
-                        <h3>Virat Kohli</h3>
-                        <span class="tag">CONTENT IMAGE</span>
-                    </figcaption>
+    <!-- Examples: before-and-after style transfer showcase -->
+    {% set content_example = url_for('static', filename='examples/virat.jpg') %}
+    {% set examples = [
+        {'num': '01', 'style': '11.jpg', 'output': 'stylized_virat_11.jpg'},
+        {'num': '02', 'style': '1499.jpg', 'output': 'stylized_virat_1499.jpg'},
+        {'num': '03', 'style': 'picasso_seated_nude_hr.jpg', 'output': 'stylized_virat_hr.jpg'}
+    ] %}
+    <section class="examples-section mt-5 pt-3" aria-labelledby="examplesTitle">
+        <h2 class="section-title" id="examplesTitle">Style Transfer Examples</h2>
+        <p class="section-sub">One content photo, three style references, and the generated result for each.</p>
+        <div class="showcase">
+            {% for ex in examples %}
+            <article class="showcase-card glass">
+                <div class="showcase-inputs">
+                    <figure class="showcase-frame">
+                        <img class="showcase-img" src="{{ content_example }}" alt="Content image for example {{ ex.num }}" loading="lazy">
+                        <figcaption><span class="tag">CONTENT IMAGE</span></figcaption>
+                    </figure>
+                    <figure class="showcase-frame">
+                        <img class="showcase-img" src="{{ url_for('static', filename='examples/' ~ ex.style) }}" alt="Style reference for example {{ ex.num }}" loading="lazy">
+                        <figcaption><span class="tag">STYLE REFERENCE</span></figcaption>
+                    </figure>
+                </div>
+                <div class="showcase-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></div>
+                <figure class="showcase-frame showcase-output">
+                    <img class="showcase-img" src="{{ url_for('static', filename='examples/' ~ ex.output) }}" alt="Stylized output for example {{ ex.num }}" loading="lazy">
+                    <figcaption><span class="tag tag-output">OUTPUT</span></figcaption>
                 </figure>
-            </div>
-            <div class="col-md-6 col-lg-5">
-                <figure class="example-card glass">
-                    <div class="example-media">
-                        <img src="{{ url_for('send_example', filename='brad_pitt.jpg') }}" alt="Brad Pitt content image">
-                        <div class="missing-note">
-                            <i class="fas fa-circle-exclamation"></i>
-                            <span>Image not found. Add <code>examples/brad_pitt.jpg</code></span>
-                        </div>
-                    </div>
-                    <figcaption>
-                        <h3>Brad Pitt</h3>
-                        <span class="tag">CONTENT IMAGE</span>
-                    </figcaption>
-                </figure>
-            </div>
+            </article>
+            {% endfor %}
         </div>
     </section>
 
@@ -788,9 +960,42 @@
     </section>
 </main>
 
+<section class="connect-section" id="connect" aria-labelledby="connectTitle">
+    <div class="container text-center">
+        <p class="connect-kicker">// LET'S CONNECT</p>
+        <h2 class="connect-title" id="connectTitle">
+            Transforming pixels.<br>
+            <span class="connect-gradient">Creating possibilities.</span>
+        </h2>
+        <p class="connect-sub">PRISMORA AI explores the intersection of artificial intelligence and creative expression through Adaptive Instance Normalization and neural style transfer.</p>
+        <p class="connect-detail">Let's connect, collaborate and explore what's possible with AI.</p>
+
+        <div class="connect-links">
+            <a class="connect-btn" href="https://www.linkedin.com/in/devanshyelne/" target="_blank" rel="noopener noreferrer" aria-label="Connect with Devansh Yelne on LinkedIn">
+                <i class="fab fa-linkedin-in" aria-hidden="true"></i><span>LinkedIn</span>
+            </a>
+            <a class="connect-btn" href="https://github.com/Devanshyelne" target="_blank" rel="noopener noreferrer" aria-label="View Devansh Yelne on GitHub">
+                <i class="fab fa-github" aria-hidden="true"></i><span>GitHub</span>
+            </a>
+            <a class="connect-btn" href="https://x.com/DevanshYel78731" target="_blank" rel="noopener noreferrer" aria-label="Follow Devansh Yelne on X">
+                <svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19 9.46 12.504h-7.406l-5.802-7.584-6.634 7.584h-3.68l8.6-9.83L.0 1.153h7.594l5.245 6.932zm-1.293 19.49h2.039L6.486 3.24H4.298z"/></svg><span>X / Twitter</span>
+            </a>
+            <a class="connect-btn" href="mailto:devanshyelne06@gmail.com" aria-label="Email Devansh Yelne at Gmail">
+                <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                    <rect x="2.5" y="4.5" width="19" height="15" rx="1.8" fill="#fff"/>
+                    <path d="M3.4 6 12 12.6 20.6 6" fill="none" stroke="#EA4335" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M3.4 6.2v11.6" fill="none" stroke="#4285F4" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M3.4 13.4v4.4" fill="none" stroke="#FBBC04" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M20.6 6.2v11.6" fill="none" stroke="#34A853" stroke-width="1.8" stroke-linecap="round"/>
+                </svg><span>Gmail</span>
+            </a>
+        </div>
+    </div>
+</section>
+
 <footer class="site-footer">
     <div class="container text-center">
-        &copy; 2026 StyleForge AI &middot; AdaIN neural style transfer &middot; Flask + PyTorch
+        Created by Devansh Yelne
     </div>
 </footer>
 
@@ -839,22 +1044,23 @@
     /* ---------- Image slots ---------- */
     function createSlot(prefix, label, placeholderIcon, placeholderText) {
         const input = form.querySelector('input[type="file"][name="' + prefix + '"]');
-        const pathInput = form.querySelector('input[name="' + prefix + '_path"]');
+        const uploadRefInput = form.querySelector('input[name="' + prefix + '_upload_ref"]');
+        const uploadLabel = form.querySelector('label[for="' + prefix + '"]');
+        const exampleSelect = $(prefix + 'Example');
         const preview = $(prefix + 'Preview');
         const name = $(prefix + 'Name');
         const remove = $(prefix + 'Remove');
-        if (!input || !pathInput || !preview || !name || !remove) return null;
+        if (!input || !uploadRefInput || !uploadLabel || !exampleSelect || !preview || !name || !remove) return null;
 
         const placeholderHTML =
             '<div class="placeholder"><i class="fas ' + placeholderIcon + '"></i><span>' + placeholderText + '</span></div>';
 
         return {
-            input, pathInput, preview, name, remove, label,
+            input, uploadRefInput, uploadLabel, exampleSelect, preview, name, remove, label,
             placeholderHTML,
-            file: null, // the valid File currently selected in this slot, if any
 
             hasImage() {
-                return this.input.files.length > 0 || this.pathInput.value !== '';
+                return (!this.input.disabled && this.input.files.length > 0) || this.uploadRefInput.value !== '' || this.exampleSelect.value !== '';
             },
 
             show(file) {
@@ -867,30 +1073,33 @@
                 this.preview.appendChild(img);
                 this.name.textContent = file.name;
                 this.remove.hidden = false;
-                this.file = file;
-                // A new selection replaces any previously uploaded server path
-                this.pathInput.value = '';
+                this.input.disabled = false;
+                // A new upload replaces a saved upload or built-in selection.
+                this.uploadRefInput.value = '';
+                this.exampleSelect.value = '';
+            },
+
+            showExample(option) {
+                // The example ID is submitted separately; the browser file input
+                // stays untouched and is disabled so its selection is not posted.
+                this.input.disabled = true;
+                this.uploadRefInput.value = '';
+                const img = document.createElement('img');
+                img.alt = this.label + ' preview';
+                img.src = option.dataset.url;
+                this.preview.innerHTML = '';
+                this.preview.appendChild(img);
+                this.name.textContent = option.textContent;
+                this.remove.hidden = false;
             },
 
             clear() {
-                this.input.value = '';
-                this.pathInput.value = '';
-                this.file = null;
+                this.input.disabled = true;
+                this.uploadRefInput.value = '';
+                this.exampleSelect.value = '';
                 this.preview.innerHTML = this.placeholderHTML;
                 this.name.textContent = 'No file selected';
                 this.remove.hidden = true;
-            },
-
-            // Restore the last valid selection after rejecting an invalid one
-            restore() {
-                this.input.value = '';
-                if (this.file && typeof DataTransfer !== 'undefined') {
-                    try {
-                        const dt = new DataTransfer();
-                        dt.items.add(this.file);
-                        this.input.files = dt.files;
-                    } catch (e) { /* older browsers: keep the preview, user can re-select */ }
-                }
             }
         };
     }
@@ -901,18 +1110,37 @@
     ].filter(Boolean);
 
     slots.forEach((slot) => {
+        slot.uploadLabel.addEventListener('click', () => {
+            // Re-enable the native picker after Remove or an example selection.
+            slot.input.disabled = false;
+        });
+
         slot.input.addEventListener('change', () => {
             const file = slot.input.files && slot.input.files[0];
             if (!file) return; // selection cancelled: keep current state
 
             const error = validateFile(file);
             if (error) {
-                slot.restore();
+                if (slot.uploadRefInput.value || slot.exampleSelect.value) {
+                    slot.input.disabled = true;
+                } else {
+                    slot.clear();
+                }
                 showHint(error);
                 return;
             }
             showHint('');
             slot.show(file);
+        });
+
+        slot.exampleSelect.addEventListener('change', () => {
+            const option = slot.exampleSelect.selectedOptions[0];
+            if (slot.exampleSelect.value && option && option.dataset.url) {
+                slot.showExample(option);
+                showHint('');
+            } else {
+                slot.clear();
+            }
         });
 
         slot.remove.addEventListener('click', () => {
@@ -970,20 +1198,37 @@
         }
     });
 
-    /* ---------- Example images: hide gracefully if missing ---------- */
-    document.querySelectorAll('.example-media img').forEach((img) => {
-        const markMissing = () => {
-            const wrap = img.closest('.example-media');
-            if (wrap) wrap.classList.add('is-missing');
-        };
-        img.addEventListener('error', markMissing);
-        if (img.complete && img.naturalWidth === 0) markMissing();
-    });
-
     /* ---------- Result: scroll into view after generation ---------- */
     const resultSection = $('resultSection');
     if (resultSection) {
         resultSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    }
+
+    /* Keep FAQs usable if the optional Bootstrap JavaScript CDN is unavailable. */
+    if (!window.bootstrap || !window.bootstrap.Collapse) {
+        document.querySelectorAll('.faq-section [data-bs-toggle="collapse"]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const target = document.querySelector(button.getAttribute('data-bs-target'));
+                if (!target) return;
+                const willOpen = !target.classList.contains('show');
+                const accordion = button.closest('.accordion');
+                if (willOpen && accordion) {
+                    accordion.querySelectorAll('.accordion-collapse.show').forEach((openPanel) => {
+                        openPanel.classList.remove('show');
+                        const openButton = accordion.querySelector(
+                            '[data-bs-target="#' + openPanel.id + '"]'
+                        );
+                        if (openButton) {
+                            openButton.classList.add('collapsed');
+                            openButton.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                }
+                target.classList.toggle('show', willOpen);
+                button.classList.toggle('collapsed', !willOpen);
+                button.setAttribute('aria-expanded', String(willOpen));
+            });
+        });
     }
 
     /* ---------- Background particles ---------- */

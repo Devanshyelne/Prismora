@@ -1,4 +1,4 @@
-"""Dataset, preprocessing and AdaIN helpers for StyleForge AI."""
+"""Dataset, preprocessing and AdaIN helpers for PRISMORA AI."""
 from pathlib import Path
 
 from PIL import Image, ImageFile, ImageOps
