@@ -37,7 +37,7 @@ train_1/
 *.ckpt
 
 # Training experiments
-experiment/
+
 
 # Uploaded and generated images
 static/uploads/*
@@ -64,7 +64,7 @@ venv312/
 .venv/
 
 # Model files and datasets
-experiment/
+
 *.pth
 *.pt
 content_data/
