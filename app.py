@@ -140,7 +140,8 @@ def style_transfer(content_image, style_image, alpha=0.65):
     alpha = max(0.0, min(1.0, float(alpha)))
     encoder_model, decoder_model = load_models()
 
-    # Keep the trained inference resize policy (short side = 768 / 512).
+    # Keep the trained inference resize policy (short side = 768 / 512). for local host 
+    # when running on render use 256 /256 for free tier
     content_transform = transforms.Compose([
         transforms.Resize(768),
         transforms.ToTensor(),
