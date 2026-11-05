@@ -27,9 +27,9 @@ MODEL_ASSETS = (
         sha256="804ca2835ecf7539f0cd2a7ac3c18ce81e6f8468969ae7117ac0c148d286bb4a",
     ),
     ModelAsset(
-        destination="experiment/balanced_v2/decoder_16.pth",
-        object_key="balanced_v2/decoder_16.pth",
-        sha256="859715b98b510b975239cae92cae88aa1247e82cbceddd7484f1f55a764c0954",
+        destination="experiment/balanced_v2/decoder_final.pth",
+        object_key="balanced_v2/decoder_final.pth",
+        sha256="11a5f1811a503388f9ee246610e1b573089493dad7fa1efd4838d603c9150378",
     ),
 )
 
