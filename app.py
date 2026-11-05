@@ -28,7 +28,7 @@ UPLOAD_DIR = STATIC_DIR / "uploads"
 EXAMPLE_DIR = STATIC_DIR / "examples"
 VGG_PATH = BASE_DIR / "vgg_normalised.pth"
 # decoder_16.pth is the final saved decoder and matches checkpoint_latest.pth.
-DECODER_PATH = BASE_DIR / "experiment" / "balanced_v2" / "decoder_16.pth"
+DECODER_PATH = BASE_DIR / "experiment" / "balanced_v2" / "decoder_final.pth"
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 MAX_IMAGE_BYTES = 10 * 1024 * 1024
 UPLOAD_REF_PATTERN = re.compile(r"^upload_[0-9a-f]{32}_[A-Za-z0-9_.-]+$")
