@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>StyleForge AI</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0b1020;
+        --surface: rgba(22, 28, 48, 0.62);
+        --surface-strong: rgba(15, 20, 36, 0.85);
+        --border: rgba(255, 255, 255, 0.09);
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --violet: #8b5cf6;
+        --purple: #a855f7;
+        --indigo: #6366f1;
+        --success: #10b981;
+        --danger: #f87171;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        background-color: var(--bg);
+        background-image:
+            radial-gradient(1100px 600px at 8% -10%, rgba(99, 102, 241, 0.18), transparent 60%),
+            radial-gradient(900px 520px at 100% 0%, rgba(168, 85, 247, 0.16), transparent 60%);
+        background-attachment: fixed;
+        color: var(--text);
+        min-height: 100vh;
+        line-height: 1.55;
+    }
+
+    h1, h2, h3, .brand, .btn-transfer, .loader-title, .strength-head label, .slot-head {
+        font-family: 'Orbitron', sans-serif;
+    }
+
+    /* Background particles */
+    #neuralCanvas {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+    }
+    .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(110px);
+        opacity: 0.25;
+        pointer-events: none;
+        z-index: 0;
+    }
+    .orb-1 { width: 520px; height: 520px; top: -160px; left: -140px; background: #4f46e5; }
+    .orb-2 { width: 440px; height: 440px; bottom: -160px; right: -120px; background: #a855f7; }
+
+    main, header, section, footer { position: relative; z-index: 1; }
+
+    /* Header */
+    .site-header {
+        border-bottom: 1px solid var(--border);
+        background: rgba(11, 16, 32, 0.7);
+        backdrop-filter: blur(10px);
+    }
+    .brand {
+        font-weight: 700;
+        font-size: 1.15rem;
+        letter-spacing: 1px;
+        background: linear-gradient(90deg, #818cf8, #c084fc);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .header-meta {
+        font-size: 0.85rem;
+        color: var(--muted);
+    }
+
+    /* Hero */
+    .hero {
+        padding: 3.5rem 1rem 2.25rem;
+        text-align: center;
+    }
+    .eyebrow {
+        display: inline-block;
+        font-size: 0.8rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #c4b5fd;
+        border: 1px solid rgba(168, 85, 247, 0.35);
+        border-radius: 999px;
+        padding: 0.3rem 0.9rem;
+        margin-bottom: 1.1rem;
+    }
+    .hero h1 {
+        font-weight: 700;
+        font-size: clamp(2rem, 6vw, 3.4rem);
+        letter-spacing: 2px;
+        margin: 0 0 0.75rem;
+        background: linear-gradient(90deg, #818cf8, #c084fc, #f472b6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .tagline {
+        color: var(--muted);
+        font-size: 1.1rem;
+        margin: 0 auto;
+        max-width: 560px;
+    }
+
+    /* Glass cards */
+    .glass {
+        background: var(--surface);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        box-shadow: 0 20px 45px -20px rgba(0, 0, 0, 0.6);
+    }
+    .slot-head {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #f8fafc;
+    }
+    .slot-body { padding: 1.25rem; }
+
+    /* Image slots */
+    .preview-box {
+        height: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--surface-strong);
+        border: 1px dashed rgba(148, 163, 184, 0.3);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+    .preview-box img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        display: block;
+    }
+    .placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        color: #64748b;
+        font-size: 0.95rem;
+        text-align: center;
+        padding: 1rem;
+    }
+    .placeholder i { font-size: 2rem; }
+
+    .file-row {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+    }
+    .file-input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
+    }
+    .btn-upload,
+    .btn-remove {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        padding: 0.5rem 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .btn-upload {
+        color: #e0e7ff;
+        background: rgba(99, 102, 241, 0.15);
+        border: 1px solid rgba(129, 140, 248, 0.45);
+    }
+    .btn-upload:hover,
+    .file-input:focus-visible + .btn-upload {
+        background: rgba(99, 102, 241, 0.3);
+        border-color: #a5b4fc;
+        color: #fff;
+    }
+    .btn-remove {
+        color: #fecaca;
+        background: transparent;
+        border: 1px solid rgba(248, 113, 113, 0.4);
+    }
+    .btn-remove:hover { background: rgba(248, 113, 113, 0.12); }
+    .btn-remove[hidden] { display: none; }
+
+    .file-name {
+        margin: 0.75rem 0 0;
+        font-size: 0.85rem;
+        color: var(--muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Strength slider */
+    .controls { padding: 1.5rem 1.5rem 1.75rem; }
+    .strength-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    .strength-head label {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        color: #c4b5fd;
+        margin: 0;
+    }
+    .strength-head output {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.15rem;
+        color: #fff;
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        padding: 0.2rem 0.85rem;
+        border-radius: 999px;
+        min-width: 4.5rem;
+        text-align: center;
+    }
+    .strength-range {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 8px;
+        border-radius: 999px;
+        outline: none;
+        margin: 0;
+        -webkit-tap-highlight-color: transparent;
+        background: linear-gradient(to right,
+            #8b5cf6 0%,
+            #a855f7 var(--fill, 100%),
+            rgba(148, 163, 184, 0.25) var(--fill, 100%),
+            rgba(148, 163, 184, 0.25) 100%);
+        cursor: pointer;
+    }
+    .strength-range::-webkit-slider-runnable-track {
+        height: 8px;
+        background: transparent;
+        border: none;
+    }
+    .strength-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 22px;
+        height: 22px;
+        margin-top: -7px;
+        border-radius: 50%;
+        background: #fff;
+        border: 3px solid #7c3aed;
+        box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.25);
+        cursor: pointer;
+    }
+    .strength-range::-moz-range-track {
+        height: 8px;
+        background: transparent;
+        border: none;
+    }
+    .strength-range::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #fff;
+        border: 3px solid #7c3aed;
+        box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.25);
+        cursor: pointer;
+    }
+    .strength-range:focus-visible::-webkit-slider-thumb {
+        box-shadow: 0 0 0 6px rgba(168, 85, 247, 0.45);
+    }
+    .strength-range:focus-visible::-moz-range-thumb {
+        box-shadow: 0 0 0 6px rgba(168, 85, 247, 0.45);
+    }
+    .range-scale {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-top: 0.6rem;
+    }
+
+    /* Transfer button */
+    .btn-transfer {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 260px;
+        padding: 0.95rem 2.6rem;
+        border: 0;
+        border-radius: 999px;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        box-shadow: 0 12px 28px -12px rgba(168, 85, 247, 0.75);
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    }
+    .btn-transfer:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 32px -12px rgba(168, 85, 247, 0.85);
+    }
+    .btn-transfer:focus-visible {
+        outline: 2px solid #c4b5fd;
+        outline-offset: 3px;
+    }
+    .btn-transfer.is-busy {
+        opacity: 0.7;
+        pointer-events: none;
+    }
+    .form-hint {
+        min-height: 1.4rem;
+        margin: 0.85rem 0 0;
+        font-size: 0.9rem;
+        color: #fca5a5;
+    }
+
+    /* Error */
+    .alert-error {
+        background: rgba(220, 38, 38, 0.15);
+        border: 1px solid rgba(220, 38, 38, 0.6);
+        color: #fecaca;
+        border-radius: 14px;
+        padding: 0.9rem 1.2rem;
+        text-align: center;
+    }
+
+    /* Result */
+    .result { overflow: hidden; }
+    .result-media {
+        background: var(--surface-strong);
+        padding: 1rem;
+        text-align: center;
+    }
+    .result-media img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 75vh;
+        object-fit: contain;
+        margin: 0 auto;
+        border-radius: 12px;
+    }
+    .result-footer {
+        text-align: center;
+        padding: 1.1rem;
+    }
+    .btn-download {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        padding: 0.6rem 1.5rem;
+        color: #fff;
+        background: linear-gradient(135deg, #10b981, #059669);
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .btn-download:hover { color: #fff; filter: brightness(1.08); }
+
+    /* Examples */
+    .section-title {
+        font-size: 0.95rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #c4b5fd;
+        text-align: center;
+        margin-bottom: 0.4rem;
+    }
+    .section-sub {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+    .example-card {
+        margin: 0;
+        overflow: hidden;
+        height: 100%;
+    }
+    .example-media {
+        position: relative;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--surface-strong);
+        padding: 0.75rem;
+    }
+    .example-media img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 10px;
+    }
+    .missing-note {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+        color: #fca5a5;
+        font-size: 0.9rem;
+        text-align: center;
+        padding: 1rem;
+    }
+    .missing-note code {
+        color: #e0e7ff;
+        background: rgba(255, 255, 255, 0.06);
+        padding: 0.1rem 0.4rem;
+        border-radius: 6px;
+    }
+    .example-media.is-missing img { display: none; }
+    .example-media.is-missing .missing-note { display: flex; }
+    .example-card figcaption {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 1.25rem;
+        border-top: 1px solid var(--border);
+    }
+    .example-card h3 {
+        font-size: 0.95rem;
+        margin: 0;
+        color: #f8fafc;
+    }
+    .tag {
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 1.2px;
+        color: #c4b5fd;
+        border: 1px solid rgba(168, 85, 247, 0.4);
+        border-radius: 999px;
+        padding: 0.2rem 0.6rem;
+        white-space: nowrap;
+    }
+
+    /* FAQ */
+    .faq-section .accordion-item {
+        background: rgba(15, 20, 36, 0.6);
+        border: 1px solid var(--border);
+        border-radius: 12px !important;
+        margin-bottom: 0.75rem;
+        overflow: hidden;
+    }
+    .faq-section .accordion-button {
+        background: rgba(15, 23, 42, 0.75);
+        color: var(--text);
+        font-weight: 600;
+        box-shadow: none;
+    }
+    .faq-section .accordion-button:not(.collapsed) {
+        background: rgba(129, 140, 248, 0.18);
+        color: #f8fafc;
+        box-shadow: none;
+    }
+    .faq-section .accordion-button::after { filter: invert(1) brightness(1.4); }
+    .faq-section .accordion-body {
+        color: var(--muted);
+    }
+
+    /* Footer */
+    .site-footer {
+        margin-top: 4rem;
+        padding: 2rem 0;
+        border-top: 1px solid var(--border);
+        color: #64748b;
+        font-size: 0.85rem;
+    }
+
+    /* Loader */
+    .loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background: rgba(11, 16, 32, 0.88);
+        backdrop-filter: blur(5px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+    }
+    .loader.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+    .spinner {
+        width: 64px;
+        height: 64px;
+        border: 4px solid rgba(255, 255, 255, 0.08);
+        border-top-color: #818cf8;
+        border-right-color: #c084fc;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1.25rem;
+    }
+    .loader-title {
+        color: #fff;
+        letter-spacing: 3px;
+        font-size: 1.1rem;
+        margin: 0;
+    }
+    .loader-sub {
+        color: var(--muted);
+        margin: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Entrance */
+    .reveal {
+        animation: reveal 0.6s ease-out both;
+    }
+    @keyframes reveal {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: none; }
+    }
+
+    /* Responsive */
+    @media (max-width: 767.98px) {
+        .hero { padding-top: 2.5rem; }
+        .preview-box { height: 220px; }
+        .example-media { height: 240px; }
+        .btn-transfer { width: 100%; min-width: 0; }
+        .controls { padding: 1.25rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+</head>
+<body>
+
+<canvas id="neuralCanvas" aria-hidden="true"></canvas>
+<div class="orb orb-1" aria-hidden="true"></div>
+<div class="orb orb-2" aria-hidden="true"></div>
+
+<header class="site-header">
+    <div class="container d-flex align-items-center justify-content-between py-3">
+        <span class="brand"><i class="fas fa-wand-magic-sparkles me-2"></i>STYLEFORGE AI</span>
+        <span class="header-meta d-none d-sm-inline">AdaIN Neural Style Transfer</span>
+    </div>
+</header>
+
+<section class="hero reveal">
+    <div class="container">
+        <span class="eyebrow">Flask &middot; PyTorch &middot; AdaIN</span>
+        <h1>STYLEFORGE AI</h1>
+        <p class="tagline">Redefine reality with AI-powered artistry. Upload a content photo and a style reference, then generate a stylized result.</p>
+    </div>
+</section>
+
+<main class="container pb-4">
+    <form method="post" enctype="multipart/form-data" id="uploadForm">
+        {{ form.hidden_tag() }}
+        {# Hidden paths keep previously uploaded images when only one slot is replaced #}
+        <input type="hidden" name="content_path" id="contentPath" value="{{ content_path or '' }}">
+        <input type="hidden" name="style_path" id="stylePath" value="{{ style_path or '' }}">
+        {% set alpha_value = form.alpha.data if form.alpha.data is not none else 1.0 %}
+
+        <div class="row g-4">
+            <!-- Content Source -->
+            <div class="col-lg-6">
+                <section class="glass h-100 reveal" aria-labelledby="contentTitle">
+                    <header class="slot-head" id="contentTitle">Content Source</header>
+                    <div class="slot-body">
+                        <div class="preview-box" id="contentPreview">
+                            {% if content_image %}
+                                <img src="{{ url_for('send_image', filename=content_image) }}" alt="Content image preview">
+                            {% else %}
+                                <div class="placeholder"><i class="fas fa-image"></i><span>No content image selected</span></div>
+                            {% endif %}
+                        </div>
+                        <div class="file-row">
+                            {{ form.content(class="file-input", accept=".png,.jpg,.jpeg,image/png,image/jpeg") }}
+                            <label class="btn-upload" for="content"><i class="fas fa-upload"></i><span>{{ 'Replace image' if (content_image or content_path) else 'Upload image' }}</span></label>
+                            <button type="button" class="btn-remove" id="contentRemove" {{ '' if (content_image or content_path) else 'hidden' }}><i class="fas fa-xmark"></i> Remove</button>
+                        </div>
+                        <p class="file-name" id="contentName">{{ content_image or 'No file selected' }}</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Style Reference -->
+            <div class="col-lg-6">
+                <section class="glass h-100 reveal" aria-labelledby="styleTitle">
+                    <header class="slot-head" id="styleTitle">Style Reference</header>
+                    <div class="slot-body">
+                        <div class="preview-box" id="stylePreview">
+                            {% if style_image %}
+                                <img src="{{ url_for('send_image', filename=style_image) }}" alt="Style reference preview">
+                            {% else %}
+                                <div class="placeholder"><i class="fas fa-palette"></i><span>No style reference selected</span></div>
+                            {% endif %}
+                        </div>
+                        <div class="file-row">
+                            {{ form.style(class="file-input", accept=".png,.jpg,.jpeg,image/png,image/jpeg") }}
+                            <label class="btn-upload" for="style"><i class="fas fa-upload"></i><span>{{ 'Replace image' if (style_image or style_path) else 'Upload image' }}</span></label>
+                            <button type="button" class="btn-remove" id="styleRemove" {{ '' if (style_image or style_path) else 'hidden' }}><i class="fas fa-xmark"></i> Remove</button>
+                        </div>
+                        <p class="file-name" id="styleName">{{ style_image or 'No file selected' }}</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-8">
+                <section class="glass controls reveal">
+                    <div class="strength-head">
+                        <label for="alpha">Style Strength</label>
+                        <output id="alphaValue" for="alpha">{{ "%.2f"|format(alpha_value) }}</output>
+                    </div>
+                    {{ form.alpha(class="strength-range", id="alpha", type="range", min="0", max="1", step="0.05", value=alpha_value) }}
+                    <div class="range-scale"><span>0.00 &middot; Subtle</span><span>1.00 &middot; Strong</span></div>
+                </section>
+
+                <div class="text-center mt-4">
+                    {{ form.submit(class="btn-transfer", value="Transfer Style") }}
+                    <p class="form-hint" id="formHint" role="status" aria-live="polite"></p>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {% if error %}
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-8">
+                <div class="alert-error" role="alert"><strong>Error:</strong> {{ error }}</div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if result_image %}
+    <div class="row justify-content-center mt-5" id="resultSection">
+        <div class="col-lg-8">
+            <section class="glass result reveal">
+                <header class="slot-head" style="color:#6ee7b7;">Stylized Result</header>
+                <div class="result-media">
+                    <img src="{{ url_for('send_image', filename=result_image) }}" alt="Stylized result">
+                </div>
+                <div class="result-footer">
+                    <a class="btn-download" href="{{ url_for('send_image', filename=result_image) }}" download>
+                        <i class="fas fa-download"></i> Download Result
+                    </a>
+                </div>
+            </section>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Examples: content images only -->
+    <section class="examples-section mt-5 pt-3">
+        <h2 class="section-title">Content Examples</h2>
+        <p class="section-sub">Sample content images. Upload one of these, or your own photo, as the content source.</p>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <figure class="example-card glass">
+                    <div class="example-media">
+                        <img src="{{ url_for('send_example', filename='virat_kohli.jpg') }}" alt="Virat Kohli content image">
+                        <div class="missing-note">
+                            <i class="fas fa-circle-exclamation"></i>
+                            <span>Image not found. Add <code>examples/virat_kohli.jpg</code></span>
+                        </div>
+                    </div>
+                    <figcaption>
+                        <h3>Virat Kohli</h3>
+                        <span class="tag">CONTENT IMAGE</span>
+                    </figcaption>
+                </figure>
+            </div>
+            <div class="col-md-6 col-lg-5">
+                <figure class="example-card glass">
+                    <div class="example-media">
+                        <img src="{{ url_for('send_example', filename='brad_pitt.jpg') }}" alt="Brad Pitt content image">
+                        <div class="missing-note">
+                            <i class="fas fa-circle-exclamation"></i>
+                            <span>Image not found. Add <code>examples/brad_pitt.jpg</code></span>
+                        </div>
+                    </div>
+                    <figcaption>
+                        <h3>Brad Pitt</h3>
+                        <span class="tag">CONTENT IMAGE</span>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section mt-5 pt-3">
+        <h2 class="section-title mb-4">FAQs</h2>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+                <h3 class="accordion-header" id="faqHeadingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqOne" aria-expanded="false" aria-controls="faqOne">
+                        Is the model pretrained?
+                    </button>
+                </h3>
+                <div id="faqOne" class="accordion-collapse collapse" aria-labelledby="faqHeadingOne" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">Partly. The encoder is a pretrained VGG network used for feature extraction. AdaIN itself has no learned weights, and the decoder is custom-trained to reconstruct images from the stylized features.</div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h3 class="accordion-header" id="faqHeadingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqTwo" aria-expanded="false" aria-controls="faqTwo">
+                        How does the architecture work?
+                    </button>
+                </h3>
+                <div id="faqTwo" class="accordion-collapse collapse" aria-labelledby="faqHeadingTwo" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">The content and style images pass through the pretrained VGG encoder. AdaIN then aligns the mean and variance of the content features to those of the style features. The custom-trained decoder reconstructs an image from the result. PyTorch handles training and inference, and Flask serves the web interface.</div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h3 class="accordion-header" id="faqHeadingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqThree" aria-expanded="false" aria-controls="faqThree">
+                        What does Style Strength do?
+                    </button>
+                </h3>
+                <div id="faqThree" class="accordion-collapse collapse" aria-labelledby="faqHeadingThree" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">It controls how strongly the style features replace the content features. At 0.00 the output stays close to the content image, and at 1.00 the stylization is applied at full strength. Values in between blend the two.</div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h3 class="accordion-header" id="faqHeadingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqFour" aria-expanded="false" aria-controls="faqFour">
+                        Which style images work well?
+                    </button>
+                </h3>
+                <div id="faqFour" class="accordion-collapse collapse" aria-labelledby="faqHeadingFour" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">Painting-style images with strong texture and colour, such as impressionist, abstract, cubist, watercolour, or sketch works, tend to produce the most visible effect.</div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h3 class="accordion-header" id="faqHeadingFive">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqFive" aria-expanded="false" aria-controls="faqFive">
+                        Is it a free platform?
+                    </button>
+                </h3>
+                <div id="faqFive" class="accordion-collapse collapse" aria-labelledby="faqHeadingFive" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">This demo is currently available as a free experience.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container text-center">
+        &copy; 2026 StyleForge AI &middot; AdaIN neural style transfer &middot; Flask + PyTorch
+    </div>
+</footer>
+
+<!-- Processing overlay -->
+<div class="loader" id="loader" aria-hidden="true">
+    <div class="spinner"></div>
+    <p class="loader-title">PROCESSING</p>
+    <p class="loader-sub">The neural network is painting&hellip;</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+(function () {
+    'use strict';
+
+    const $ = (id) => document.getElementById(id);
+    const form = $('uploadForm');
+    if (!form) return;
+
+    const loader = $('loader');
+    const hint = $('formHint');
+    const alpha = $('alpha');
+    const alphaValue = $('alphaValue');
+    const submitBtn = form.querySelector('input[type="submit"]');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const ALLOWED_TYPES = ['image/png', 'image/jpeg'];
+    const ALLOWED_EXT = /\.(png|jpe?g)$/i;
+    const MAX_BYTES = 10 * 1024 * 1024; // keep in line with the backend upload limit
+    let submitting = false;
+
+    function showHint(message) {
+        if (hint) hint.textContent = message || '';
+    }
+
+    function validateFile(file) {
+        if (!ALLOWED_EXT.test(file.name) || (file.type && !ALLOWED_TYPES.includes(file.type))) {
+            return 'Only PNG, JPG and JPEG images are supported.';
+        }
+        if (file.size > MAX_BYTES) {
+            return 'That image is larger than 10 MB. Please choose a smaller file.';
+        }
+        return '';
+    }
+
+    /* ---------- Image slots ---------- */
+    function createSlot(prefix, label, placeholderIcon, placeholderText) {
+        const input = form.querySelector('input[type="file"][name="' + prefix + '"]');
+        const pathInput = form.querySelector('input[name="' + prefix + '_path"]');
+        const preview = $(prefix + 'Preview');
+        const name = $(prefix + 'Name');
+        const remove = $(prefix + 'Remove');
+        if (!input || !pathInput || !preview || !name || !remove) return null;
+
+        const placeholderHTML =
+            '<div class="placeholder"><i class="fas ' + placeholderIcon + '"></i><span>' + placeholderText + '</span></div>';
+
+        return {
+            input, pathInput, preview, name, remove, label,
+            placeholderHTML,
+            file: null, // the valid File currently selected in this slot, if any
+
+            hasImage() {
+                return this.input.files.length > 0 || this.pathInput.value !== '';
+            },
+
+            show(file) {
+                const url = URL.createObjectURL(file);
+                const img = document.createElement('img');
+                img.alt = this.label + ' preview';
+                img.onload = () => URL.revokeObjectURL(url);
+                img.src = url;
+                this.preview.innerHTML = '';
+                this.preview.appendChild(img);
+                this.name.textContent = file.name;
+                this.remove.hidden = false;
+                this.file = file;
+                // A new selection replaces any previously uploaded server path
+                this.pathInput.value = '';
+            },
+
+            clear() {
+                this.input.value = '';
+                this.pathInput.value = '';
+                this.file = null;
+                this.preview.innerHTML = this.placeholderHTML;
+                this.name.textContent = 'No file selected';
+                this.remove.hidden = true;
+            },
+
+            // Restore the last valid selection after rejecting an invalid one
+            restore() {
+                this.input.value = '';
+                if (this.file && typeof DataTransfer !== 'undefined') {
+                    try {
+                        const dt = new DataTransfer();
+                        dt.items.add(this.file);
+                        this.input.files = dt.files;
+                    } catch (e) { /* older browsers: keep the preview, user can re-select */ }
+                }
+            }
+        };
+    }
+
+    const slots = [
+        createSlot('content', 'Content image', 'fa-image', 'No content image selected'),
+        createSlot('style', 'Style reference', 'fa-palette', 'No style reference selected')
+    ].filter(Boolean);
+
+    slots.forEach((slot) => {
+        slot.input.addEventListener('change', () => {
+            const file = slot.input.files && slot.input.files[0];
+            if (!file) return; // selection cancelled: keep current state
+
+            const error = validateFile(file);
+            if (error) {
+                slot.restore();
+                showHint(error);
+                return;
+            }
+            showHint('');
+            slot.show(file);
+        });
+
+        slot.remove.addEventListener('click', () => {
+            slot.clear();
+            showHint('');
+        });
+    });
+
+    /* ---------- Style strength ---------- */
+    function syncAlpha() {
+        if (!alpha || !alphaValue) return;
+        const value = parseFloat(alpha.value);
+        const min = parseFloat(alpha.min);
+        const max = parseFloat(alpha.max);
+        alphaValue.textContent = value.toFixed(2);
+        alpha.style.setProperty('--fill', ((value - min) / (max - min)) * 100 + '%');
+    }
+    if (alpha) {
+        alpha.addEventListener('input', syncAlpha);
+        syncAlpha();
+    }
+
+    /* ---------- Submission ---------- */
+    form.addEventListener('submit', (event) => {
+        if (submitting) {
+            event.preventDefault();
+            return;
+        }
+        const missing = slots.find((slot) => !slot.hasImage());
+        if (missing) {
+            event.preventDefault();
+            showHint('Please add a ' + missing.label.toLowerCase() + ' before transferring the style.');
+            return;
+        }
+        submitting = true;
+        showHint('');
+        if (submitBtn) {
+            submitBtn.classList.add('is-busy');
+            submitBtn.setAttribute('aria-disabled', 'true');
+        }
+        loader.classList.add('active');
+        loader.setAttribute('aria-hidden', 'false');
+    });
+
+    // Restore the page state when returning via the back/forward cache
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+            submitting = false;
+            loader.classList.remove('active');
+            loader.setAttribute('aria-hidden', 'true');
+            if (submitBtn) {
+                submitBtn.classList.remove('is-busy');
+                submitBtn.removeAttribute('aria-disabled');
+            }
+        }
+    });
+
+    /* ---------- Example images: hide gracefully if missing ---------- */
+    document.querySelectorAll('.example-media img').forEach((img) => {
+        const markMissing = () => {
+            const wrap = img.closest('.example-media');
+            if (wrap) wrap.classList.add('is-missing');
+        };
+        img.addEventListener('error', markMissing);
+        if (img.complete && img.naturalWidth === 0) markMissing();
+    });
+
+    /* ---------- Result: scroll into view after generation ---------- */
+    const resultSection = $('resultSection');
+    if (resultSection) {
+        resultSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    }
+
+    /* ---------- Background particles ---------- */
+    const canvas = $('neuralCanvas');
+    if (canvas && canvas.getContext) {
+        const ctx = canvas.getContext('2d');
+        let width = 0, height = 0, particles = [];
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            const count = Math.min(60, Math.floor((width * height) / 26000));
+            particles = Array.from({ length: count }, () => ({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.25,
+                vy: (Math.random() - 0.5) * 0.25,
+                r: Math.random() * 1.5 + 0.8
+            }));
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, width, height);
+            for (const p of particles) {
+                if (!reduceMotion) {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if (p.x < 0 || p.x > width) p.vx *= -1;
+                    if (p.y < 0 || p.y > height) p.vy *= -1;
+                }
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(192, 132, 252, 0.4)';
+                ctx.fill();
+            }
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const a = particles[i], b = particles[j];
+                    const d = Math.hypot(a.x - b.x, a.y - b.y);
+                    if (d < 110) {
+                        ctx.strokeStyle = 'rgba(129, 140, 248, ' + (0.12 * (1 - d / 110)) + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(a.x, a.y);
+                        ctx.lineTo(b.x, b.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            if (!reduceMotion) requestAnimationFrame(drawParticles);
+        }
+
+        let resizeTimer = null;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                resizeCanvas();
+                if (reduceMotion) drawParticles();
+            }, 150);
+        });
+
+        resizeCanvas();
+        drawParticles();
+    }
+})();
+</script>
+</body>
+</html>

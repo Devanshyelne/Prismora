@@ -1,0 +1,53 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+.env/
+ENV/
+
+# VS Code and tools
+.vscode/
+.dist/
+.supercomplete/
+
+# Training datasets
+content_data/
+style_data/
+test2017/
+train_1/
+
+# Model checkpoints and weights
+*.pth
+*.pt
+*.ckpt
+
+# Training experiments
+experiment/
+
+# Uploaded and generated images
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS temporary files
+.DS_Store
+Thumbs.db
