@@ -31,10 +31,7 @@ style_data/
 test2017/
 train_1/
 
-# Model checkpoints and weights
-*.pth
-*.pt
-*.ckpt
+
 
 # Training experiments
 
@@ -63,15 +60,4 @@ venv/
 venv312/
 .venv/
 
-# Model files and datasets
 
-*.pth
-*.pt
-content_data/
-style_data/
-test2017/
-train_1/
-
-# Generated uploads
-static/uploads/*
-!static/uploads/.gitkeep
