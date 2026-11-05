@@ -14,7 +14,7 @@ Choose or upload a content photograph, select or upload an artistic style refere
 
 The diagram below summarizes the end-to-end workflow: image inputs, VGG feature extraction, AdaIN feature alignment, decoder reconstruction, Flask inference, model asset handling, deployment, and automated quality checks.
 
-![Prismora AI architecture overview](docs/prismora-architecture.png)
+![Prismora AI architecture overview](prismora-architecture.png)
 
 ---
 
